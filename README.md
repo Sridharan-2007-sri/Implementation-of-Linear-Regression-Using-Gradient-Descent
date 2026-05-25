@@ -23,81 +23,35 @@ Program to implement the linear regression using gradient descent.
 Developed by: Sridharan B
 RegisterNumber:  212225230272
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.linear_model import SGDRegressor
 
+data = {
+    'Size': [1000, 1200, 1500, 1800, 2000],
+    'Price': [300000, 350000, 400000, 450000, 500000]
+}
 
-# Load dataset
-data = pd.read_csv("ex1.txt", header=None)
-data = data.values
+df = pd.DataFrame(data)
 
-# Plot data
-plt.scatter(data[:, 0], data[:, 1])
-plt.xticks(np.arange(5, 30, step=5))
-plt.yticks(np.arange(-5, 30, step=5))
-plt.xlabel("Population of City (10,000s)")
-plt.ylabel("Profit ($10,000)")
-plt.title("Profit Prediction")
+X = df[['Size']]
+y = df['Price']
 
+model = SGDRegressor()
 
-# Compute cost function
-def computeCost(X, y, theta):
-    m = len(y)
-    h = X.dot(theta)
-    square_err = (h - y) ** 2
-    return 1 / (2 * m) * np.sum(square_err)
+model.fit(X, y)
 
+prediction = model.predict([[1600]])
 
-# Gradient Descent
-def gradientDescent(X, y, theta, alpha, num_iters):
-    m = len(y)
-    J_history = []
+print("Predicted Price:", prediction[0])
 
-    for i in range(num_iters):
-        predictions = X.dot(theta)
-        error = X.T.dot(predictions - y)
-        descent = alpha * (1 / m) * error
-        theta = theta - descent
+plt.scatter(X,y)
 
-        J_history.append(computeCost(X, y, theta))
+plt.plot(X, model.predict(X))
 
-    return theta, J_history
-
-
-# Prepare data
-m = data.shape[0]
-X = np.append(np.ones((m, 1)), data[:, 0].reshape(m, 1), axis=1)
-y = data[:, 1].reshape(m, 1)
-
-# Initialize theta
-theta = np.zeros((2, 1))
-
-# Run Gradient Descent
-theta, J_history = gradientDescent(X, y, theta, 0.01, 1500)
-
-# Print hypothesis
-print("h(x) = " + str(round(theta[0, 0], 2)) +
-      " + " + str(round(theta[1, 0], 2)) + "x")
-
-# Plot cost history
-plt.figure()
-plt.plot(J_history)
-plt.xlabel("Iteration")
-plt.ylabel("Cost J(θ)")
-plt.title("Cost function using Gradient Descent")
-
-# Plot regression line
-plt.figure()
-plt.scatter(data[:, 0], data[:, 1])
-
-x_value = [x for x in range(25)]
-y_value = [x * theta[1] + theta[0] for x in x_value]
-
-plt.plot(x_value, y_value, color="r")
-plt.xlabel("Population of City (10,000s)")
-plt.ylabel("Profit ($10,000)")
-plt.title("Profit Prediction")
+plt.xlabel("House Size")
+plt.ylabel("House Price")
+plt.title("House Price Prediction using SGD Regressor")
 
 plt.show()
 
@@ -105,13 +59,8 @@ plt.show()
 
 ## Output:
 
-<img width="847" height="662" alt="image" src="https://github.com/user-attachments/assets/802cdacf-32b3-4ed4-874e-0062c4f43a5f" />
+<img width="1246" height="752" alt="Screenshot 2026-05-25 100350" src="https://github.com/user-attachments/assets/c1fa47e2-e6ac-4595-bcef-c55bfdadf37e" />
 
-<img width="466" height="457" alt="592219689-a65749d0-0589-4130-81d2-5bccb856a497" src="https://github.com/user-attachments/assets/797f9733-ed30-46d4-a8b1-7bb748048b90" />
-
-<img width="815" height="650" alt="592219003-415f8f0e-8099-4f4c-9ed7-d1a9b3141e69" src="https://github.com/user-attachments/assets/ce80108a-4cbb-4621-bcf6-65b9757273f5" />
-
-<img width="892" height="637" alt="592219306-c4a25b88-0c21-493d-a819-f6683ac4430c" src="https://github.com/user-attachments/assets/83612f8e-d4b2-4be6-a2e9-ca55baf2203a" />
 
 ## Result:
 Thus the program to implement the linear regression using gradient descent is written and verified using python programming.
